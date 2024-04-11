@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"><!-- //NOSONAR -->
+<th:block th:replace="fragments/general.html::headerfiles('Example Page')"></th:block>
+<body>
+<header th:replace="fragments/general::header"/>
+<script>
+    function addDataToTable(data) {
+        let dataHtml = `<tr>
+                <th>Pregunta</th>
+                <th>Respuesta</th>
+                <th>Justificación</th>
+            </tr>`;
+        dataHtml += data.map((data) => {
+            return `<tr>
+                        <td>${data.pregunta}</td>
+                        <td>${data.respuesta}</td>
+                        <td>${data.justificacion}</td>
+                    </tr>`
+        }).join("");
+        console.log("dataHtml", dataHtml);
+        const table = document.querySelector("#configurations");
+        table.innerHTML = dataHtml;
+    }
+ 
+    async function getFromApi() {
+        const response = await fetch('/alexandra_cortes/parcial/tabla');
+        const data = await response.json();
+        console.log("data", data);
+        addDataToTable(data);
+    }
+ 
+</script>
+<main>
+    <br>
+    <div class="container">
+        <button onclick="getFromApi()" type="button" class="btn btn-primary">Mostrar todas las configuraciones desde una API</button>
+        <br><br>
+        <table id="configurations" class="table">
+        </table>
+    </div>
+    <br><br><br>
+</main>
+</body>
+</html>
