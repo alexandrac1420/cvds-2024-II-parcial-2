@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"><!-- //NOSONAR -->
+<th:block th:replace="fragments/general.html::headerfiles('Example Page')"></th:block>
+<body>
+<header th:replace="fragments/general::header"/>
+<script>
+    function addDataToTable(data) {
+        let dataHtml = `<tr>
+                <th>Numero</th>
+                <th>Letra</th>
+                <th>Respuesta</th>
+            </tr>`;
+        dataHtml += data.map((value) => {
+            return `<tr>
+                        <td>${value.numero}</td>
+                        <td>${value.letra}</td>
+                        <td>${value.argumento}</td>
+                    </tr>`
+        }).join("");
+        console.log("dataHtml", dataHtml);
+        const table = document.querySelector("#respuestas");
+        table.innerHTML = dataHtml;
+    }
+
+    async function getFromApi() {
+        const response = await fetch('api/samuel_rojas');
+        const data = await response.json();
+        console.log("data", data);
+        addDataToTable(data);
+    }
+
+</script>
+<main>
+    <br>
+    <div class="container">
+        <button onclick="getFromApi()" type="button" class="btn btn-primary">Mostrar todas las respuestas desde una API</button>
+        <br><br>
+        <table id="respuestas" class="table">
+        </table>
+    </div>
+    <br><br><br>
+</main>
+</body>
+</html>
